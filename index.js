@@ -1,8 +1,7 @@
 // Paste all this code in your console when you are in your Watch later list page and press enter if you whant to delete it
 
+const speed = 100;
 const videosInListSelector = '.style-scope ytd-playlist-video-renderer button';
-
-let videosCount = document.querySelectorAll(videosInListSelector).length;
 
 function clickFirstVideo() {
   document.querySelector(videosInListSelector).click();
@@ -17,15 +16,21 @@ function clickDeleteButton() {
 }
 
 function emptyWatchLaterList() {
-  if (!videosCount) {
+  console.log(
+    document.querySelectorAll(videosInListSelector).length + ' videos left'
+  );
+
+  if (!document.querySelectorAll(videosInListSelector).length) {
+    console.log('job finished1');
     clearInterval(interval);
+    return;
   }
 
   clickFirstVideo();
 
-  clickDeleteButton();
-
-  videosCount--;
+  setTimeout(() => {
+    clickDeleteButton();
+  }, speed / 2);
 }
 
-const interval = setInterval(emptyWatchLaterList, 100);
+const interval = setInterval(emptyWatchLaterList, speed);

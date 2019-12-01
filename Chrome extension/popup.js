@@ -5,9 +5,8 @@ let delYouTubeList = document.getElementById('delYouTubeList');
 delYouTubeList.onclick = function(element) {
   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
     chrome.tabs.executeScript(tabs[0].id, {
-      code: `const videosInListSelector = '.style-scope ytd-playlist-video-renderer button';
-
-      let videosCount = document.querySelectorAll(videosInListSelector).length;
+      code: `const speed = 100;
+      const videosInListSelector = '.style-scope ytd-playlist-video-renderer button';
       
       function clickFirstVideo() {
         document.querySelector(videosInListSelector).click();
@@ -22,18 +21,24 @@ delYouTubeList.onclick = function(element) {
       }
       
       function emptyWatchLaterList() {
-        if (!videosCount) {
+        console.log(
+          document.querySelectorAll(videosInListSelector).length + ' videos left'
+        );
+      
+        if (!document.querySelectorAll(videosInListSelector).length) {
+          console.log('job finished1');
           clearInterval(interval);
+          return;
         }
       
         clickFirstVideo();
       
-        clickDeleteButton();
-      
-        videosCount--;
+        setTimeout(() => {
+          clickDeleteButton();
+        }, speed / 2);
       }
       
-      const interval = setInterval(emptyWatchLaterList, 100);`
+      const interval = setInterval(emptyWatchLaterList, speed);`
     });
   });
 };
